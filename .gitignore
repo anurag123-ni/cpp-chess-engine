@@ -1,0 +1,5 @@
+# CMake build output
+build/
+
+# Executable files created by local builds
+*.exe
