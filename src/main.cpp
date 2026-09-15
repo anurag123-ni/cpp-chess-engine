@@ -9,6 +9,7 @@ enum class Color {
 };
 
 enum class PieceType {
+    None,
     Pawn,
     Knight,
     Bishop,
@@ -20,6 +21,17 @@ enum class PieceType {
 struct Piece {
     PieceType type;
     Color color;
+};
+
+struct Square {
+    char file;
+    int rank;
+};
+
+struct Move {
+    Square from;
+    Square to;
+    PieceType promotion;
 };
 
 string colorToString(Color color) {
@@ -36,6 +48,9 @@ string colorToString(Color color) {
 
 string pieceTypeToString(PieceType pieceType) {
     switch (pieceType) {
+        case PieceType::None:
+            return "None";
+
         case PieceType::Pawn:
             return "Pawn";
 
@@ -65,6 +80,35 @@ void printPiece(const Piece& piece) {
          << '\n';
 }
 
+bool isValidSquare(const Square& square) {
+    return square.file >= 'a' &&
+           square.file <= 'h' &&
+           square.rank >= 1 &&
+           square.rank <= 8;
+}
+
+string squareToString(const Square& square) {
+    string result;
+
+    result += square.file;
+    result += to_string(square.rank);
+
+    return result;
+}
+
+string moveToString(const Move& move) {
+    return squareToString(move.from) + squareToString(move.to);
+}
+
+void printMove(const Move& move) {
+    if (!isValidSquare(move.from) || !isValidSquare(move.to)) {
+        cout << "Invalid move\n";
+        return;
+    }
+
+    cout << "Move: " << moveToString(move) << '\n';
+}
+
 int main() {
     Piece whiteKing {PieceType::King, Color::White};
     Piece blackQueen {PieceType::Queen, Color::Black};
@@ -75,6 +119,14 @@ int main() {
     printPiece(whiteKing);
     printPiece(blackQueen);
     printPiece(whitePawn);
+
+    Move pawnMove = {{'e', 2}, {'e', 4}, PieceType::None};
+    Move knightMove = {{'g', 1}, {'f', 3}, PieceType::None};
+
+    cout << "\nChess moves in our engine:\n";
+
+    printMove(pawnMove);
+    printMove(knightMove);
 
     return 0;
 }
