@@ -97,7 +97,11 @@ string squareToString(const Square& square) {
 }
 
 string moveToString(const Move& move) {
-    return squareToString(move.from) + squareToString(move.to);
+    string result = squareToString(move.from) + squareToString(move.to);
+    if(move.promotion!=PieceType::None){
+       result+= "="+ pieceTypeToString(move.promotion);
+    }
+    return result;
 }
 
 void printMove(const Move& move) {
@@ -122,11 +126,13 @@ int main() {
 
     Move pawnMove = {{'e', 2}, {'e', 4}, PieceType::None};
     Move knightMove = {{'g', 1}, {'f', 3}, PieceType::None};
+    Move promotionMove = {{'e', 7}, {'e', 8}, PieceType::Queen};
 
     cout << "\nChess moves in our engine:\n";
 
     printMove(pawnMove);
     printMove(knightMove);
+    printMove(promotionMove);
 
     return 0;
 }
