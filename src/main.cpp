@@ -1,6 +1,7 @@
 #include <cassert>
 #include <iostream>
 #include <string>
+#include <vector>
 
 using namespace std;
 
@@ -39,6 +40,7 @@ string colorToString(Color color) {
     switch (color) {
         case Color::White:
             return "White";
+
         case Color::Black:
             return "Black";
     }
@@ -50,16 +52,22 @@ string pieceTypeToString(PieceType pieceType) {
     switch (pieceType) {
         case PieceType::None:
             return "None";
+
         case PieceType::Pawn:
             return "Pawn";
+
         case PieceType::Knight:
             return "Knight";
+
         case PieceType::Bishop:
             return "Bishop";
+
         case PieceType::Rook:
             return "Rook";
+
         case PieceType::Queen:
             return "Queen";
+
         case PieceType::King:
             return "King";
     }
@@ -119,6 +127,19 @@ void printMove(const Move& move) {
     cout << "Move: " << moveToString(move) << '\n';
 }
 
+void printMoves(const vector<Move>& moves) {
+    for (const Move& move : moves) {
+        printMove(move);
+    }
+}
+vector<Move> getSampleMoves(){
+    return{
+        {{'e', 2}, {'e', 4}, PieceType::None},
+        {{'g', 1}, {'f', 3}, PieceType::None},
+        {{'e', 7}, {'e', 8}, PieceType::Queen}
+    };
+}
+
 void runMoveModelTests() {
     Square validSquare = {'e', 4};
     Square invalidSquare = {'z', 9};
@@ -137,8 +158,21 @@ void runMoveModelTests() {
     cout << "All move model tests passed.\n";
 }
 
+void runMoveCollectionTests() {
+    vector<Move>moves=getSampleMoves();
+
+    assert(moves.size() == 3);
+
+    for (const Move& move : moves) {
+        assert(isValidMove(move));
+    }
+
+    cout << "All move collection tests passed.\n";
+}
+
 int main() {
     runMoveModelTests();
+    runMoveCollectionTests();
 
     Piece whiteKing {PieceType::King, Color::White};
     Piece blackQueen {PieceType::Queen, Color::Black};
@@ -150,15 +184,11 @@ int main() {
     printPiece(blackQueen);
     printPiece(whitePawn);
 
-    Move pawnMove = {{'e', 2}, {'e', 4}, PieceType::None};
-    Move knightMove = {{'g', 1}, {'f', 3}, PieceType::None};
-    Move promotionMove = {{'e', 7}, {'e', 8}, PieceType::Queen};
+    vector<Move>moves=getSampleMoves();
 
     cout << "\nChess moves in our engine:\n";
 
-    printMove(pawnMove);
-    printMove(knightMove);
-    printMove(promotionMove);
+    printMoves(moves);
 
     return 0;
 }
